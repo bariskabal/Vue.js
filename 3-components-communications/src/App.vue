@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <UserSection :userList="userList" @new-item="userList.push($event)" />
+    <UserSection />
   </div>
 </template>
 
@@ -12,7 +12,20 @@ export default {
   },
   data() {
     return {
-      userList : ["Barış","Kabal","Muhammet","Ordu"]
+      provideData : {
+        userList: ["Barış","Kabal","Muhammet","Ordu"]
+      }
+    }
+  },
+  methods: {
+    newItem(item){
+      this.provideData.userList.push(item)
+    }
+  },
+  provide() {
+    return{
+      userList : this.provideData.userList,
+      newItem : this.newItem
     }
   }
 }
