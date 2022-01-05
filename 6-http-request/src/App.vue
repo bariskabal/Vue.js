@@ -1,35 +1,36 @@
 <template>
   <div class="container">
-    <h3>Alışveriş Listesi</h3>
-    <hr>
-    <div class="my-2">
-      <input type="text" placeholder="ne alacaksın?" @keydown.enter="onSave">
-    </div>
-    <ul v-if="itemList.length > 0">
-      <li v-for="item in itemList" :key="item.id" class="d-flex justify-content-between align-items-center">
-        <span>{{item.title}}</span>
-        <button @click="onDelete(item)" class="sm red">Sil</button>
-      </li>
-    </ul>
-    <div v-else class="bg-blue text-white">
-        Herhangi bir ürün yoktur.
-    </div>
-    <small class="mt-2 text-red d-flex justify-content-end align-items-center">{{itemCount}} adet alınacak ürün vardır</small>
+    <ListSection/>
   </div>
 </template>
 
 <script>
 
 import axios from 'axios'
+import ListSection from '@/components/ListSection'
 export default {
+  components:{
+    ListSection
+  },
   data() {
     return {
-      itemList: []
+        itemList: []
+    }
+  },
+  provide(){
+    return{
+      itemCount : this.itemCount,
+      itemList : this.itemList,
+      onSave: this.onSave,
+      onDelete : this.onDelete,
+      listLength : this.itemList.length,
     }
   },
   mounted() {
     axios.get("http://localhost:3000/items").then(items_response=>{
-      this.itemList = items_response.data || [] 
+      console.log(items_response.data, "mounted 1 ")
+      this.itemList = items_response.data || []
+      console.log(this.itemCount, "Mounted 2 ")
     })
   },
   methods: {
@@ -55,6 +56,7 @@ export default {
   },
   computed:{
     itemCount(){
+      console.log(this.itemList.length,"computed ")
       return this.itemList.length || 0
     }
   }
