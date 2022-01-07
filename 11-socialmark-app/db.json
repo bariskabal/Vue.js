@@ -5,16 +5,58 @@
       "fullname": "a",
       "password": "39d55b355f31dd2a2640c03c32cde5082173c1d3",
       "id": 1,
-      "likes": [
-        4,
-        2,
-        7,
-        9,
-        8
+      "bookmarks": [
+        {
+          "userId": 1,
+          "bookmarkId": 1,
+          "id": 1,
+          "bookmark": {
+            "title": "vue döküman",
+            "url": "vue.js",
+            "categoryId": 1,
+            "description": "bu çok iyi",
+            "userId": 1,
+            "created_at": "2022-01-07T12:59:31.126Z",
+            "id": 1
+          },
+          "user": {
+            "username": "a",
+            "fullname": "a",
+            "password": "39d55b355f31dd2a2640c03c32cde5082173c1d3",
+            "id": 1
+          }
+        }
       ],
-      "bookmarks": []
+      "likes": [
+        {
+          "userId": 1,
+          "bookmarkId": 1,
+          "id": 1,
+          "bookmark": {
+            "title": "vue döküman",
+            "url": "vue.js",
+            "categoryId": 1,
+            "description": "bu çok iyi",
+            "userId": 1,
+            "created_at": "2022-01-07T12:59:31.126Z",
+            "id": 1
+          },
+          "user": {
+            "username": "a",
+            "fullname": "a",
+            "password": "39d55b355f31dd2a2640c03c32cde5082173c1d3",
+            "id": 1
+          }
+        },
+        2,
+        2,
+        3,
+        4
+      ]
     }
   ],
+  "user_likes": [],
+  "user_bookmarks": [],
   "bookmarks": [
     {
       "title": "vue döküman",
