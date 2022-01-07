@@ -21,7 +21,31 @@ const routes = [
         name:"NewBookmarkPage",
         path : "/new",
         component: () => import("@/views/NewBookmark")
-    }
+    },
+    {
+        name: "Favorites",
+        path: "/favorites",
+        meta: {
+          componentName: "appBookmarkList"
+        },
+        component: () => import("@/views/Account")
+      },
+      {
+        name: "Likes",
+        path: "/likes",
+        meta: {
+          componentName: "appBookmarkList"
+        },
+        component: () => import("@/views/Account")
+      },
+      {
+        name: "Settings",
+        path: "/settings",
+        meta: {
+          componentName: "userSettings"
+        },
+        component: () => import("@/views/Account")
+      }
 ]
 
 const router = createRouter({
@@ -34,11 +58,7 @@ router.beforeEach((to,from,next)=>{
     const authNotRequiredRoutes = ["LoginPage","RegisterPage"]
     const _isAuthenticated = store.getters._isAuthenticated
 
-    if (authNotRequiredRoutes.indexOf(to.name) > -1 && _isAuthenticated) next(false)
-
-
-
-
+    if (authNotRequiredRoutes.indexOf(to.name) > -1 && _isAuthenticated) next(false) 
     if (authRequiredRoutes.indexOf(to.name) > -1) {
         if ( _isAuthenticated) next()
         else next({name :"LoginPage"})

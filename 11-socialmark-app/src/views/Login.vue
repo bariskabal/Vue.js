@@ -31,6 +31,8 @@ export default {
         .then(login_response => {
           if(login_response?.data?.length>0){
             this.$store.commit("setUser",login_response?.data[0])
+            console.log("user : ",login_response?.data[0])
+            console.log("store_user : ",this.$store.user)
             this.$router.push({name : "HomePage"})
           }
           else{
