@@ -20,17 +20,13 @@ export default {
             bookmarkList:[]
         }
     },
+    mounted() {
+        this.$socket.on("NEW_BOOKMARK_ADDED",(bookmark) =>{
+            this.bookmarkList.push(bookmark)
+        })
+    },
     created() {
-        this.$appAxios.get("/bookmarks?_expand=category&_expand=user").then(bookmark_list_response=> {
-            this.bookmarkList = bookmark_list_response?.data || []
-        })
-        this.$appAxios.get("/user_bookmarks?_expand=bookmark&_expand=user").then(user_bookmark_response=> {
-            this.$store.commit("setBookmarks",user_bookmark_response?.data)
-        })
-        this.$appAxios.get("/user_likes?_expand=bookmark&_expand=user").then(user_like_response=> {
-            this.$store.commit("setLikes",user_like_response?.data)
-        })
-
+        this.fetchData()
     },
     // created() {
     //     this.$appAxios.get("/bookmarks?_expand=category&_expand=user").then(bookmark_list_response => {
@@ -45,6 +41,17 @@ export default {
                 console.log(bookmark_list_response)
                 this.bookmarkList = bookmark_list_response?.data || [];
         });
+        },
+        fetchData(){
+            this.$appAxios.get("/bookmarks?_expand=category&_expand=user").then(bookmark_list_response=> {
+            this.bookmarkList = bookmark_list_response?.data || []
+            })
+            this.$appAxios.get("/user_bookmarks?_expand=bookmark&_expand=user").then(user_bookmark_response=> {
+                this.$store.commit("setBookmarks",user_bookmark_response?.data)
+            })
+            this.$appAxios.get("/user_likes?_expand=bookmark&_expand=user").then(user_like_response=> {
+                this.$store.commit("setLikes",user_like_response?.data)
+            })
         }
     },
 }

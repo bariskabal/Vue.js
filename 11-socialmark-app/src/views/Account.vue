@@ -2,7 +2,7 @@
 <app-header />
 <div class="flex flex-row">
     <side-bar />
-    <component :is="$route.meta.componentName" :items="bookmarkList"/>
+    <!-- <component :is="$route.meta.componentName" :items="bookmarkList"/> -->
     <!-- <app-bookmark-list v-if="bookmarkList.length >0 " :items="bookmarkList" />   
     <div v-else>Henüz bir bookmark eklenmemiş...</div>  -->
 </div>
@@ -11,6 +11,8 @@
 <script>
 import appHeader from "@/components/Shared/appHeader"
 import sideBar from "@/components/Account/sideBar"
+
+
 export default {
     components:{
         sideBar,
@@ -27,5 +29,8 @@ export default {
              this.bookmarkList = bookmark_list_response?.data || []
         })
     },
+    mounted() {
+        this.$socket.on("WELCOME_MESSAGE", this.WELCOME_MESSAGE)
+    }
 }
 </script>
