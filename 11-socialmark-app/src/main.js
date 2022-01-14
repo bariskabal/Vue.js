@@ -19,4 +19,6 @@ app.component("appBookmarkList",appBookmarkList)
 app.config.globalProperties.$socket = socket
 app.use(router)
 app.use(store)
+app.provide("socket",socket)
+app.provide("appAxios",appAxios)
 app.mount('#app')

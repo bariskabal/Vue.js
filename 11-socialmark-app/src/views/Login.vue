@@ -12,37 +12,36 @@
 </template>
 
 
-<script>
+<script setup>
 import   CryptoJS from 'crypto-js'
-export default {
-  data() {
-    return {
-      user:{
-        username:null,
-        password:null
-      }
-    }
-  },
-  methods: {
-    onSubmit() {
-      const password = CryptoJS.HmacSHA1(this.user.password, this.$store.getters._saltKey).toString();
-      this.$appAxios
-        .get(`/users?username=${this.user.username}&password=${password}`)
-        .then(login_response => {
-          if(login_response?.data?.length>0){
-            this.$store.commit("setUser",login_response?.data[0])
-            console.log("user : ",login_response?.data[0])
-            console.log("store_user : ",this.$store.user)
-            this.$router.push({name : "HomePage"})
-          }
-          else{
-            alert("Böyle bir kullanıcı bulunamadı...")
-          }
-          
-        })
-        .catch(e => console.log(e));
-      // .finally(() => this.loader = false)
-    }
-  }
-};
+import {ref,inject} from "vue"
+import {useRouter} from "vue-router"
+import {useStore} from "vuex"
+
+const appAxios = inject("appAxios")
+const router = useRouter()
+const store = useStore()
+
+const user = ref({
+    username:null,
+    password:null
+})
+
+const onSubmit = () =>{
+    const password = CryptoJS.HmacSHA1(user.value.password, store.getters._saltKey).toString();
+    appAxios
+      .get(`/users?username=${user.value.username}&password=${password}`)
+      .then(login_response => {
+        if(login_response?.data?.length>0){
+          store.commit("setUser",login_response?.data[0])
+          router.push({name : "HomePage"})
+        }
+        else{
+          alert("Böyle bir kullanıcı bulunamadı...")
+        }
+        
+      })
+      .catch(e => console.log(e));
+    // .finally(() => this.loader = false)
+}
 </script>

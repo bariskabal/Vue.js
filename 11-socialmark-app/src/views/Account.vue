@@ -8,29 +8,14 @@
 </div>
 </template>
 
-<script>
-import appHeader from "@/components/Shared/appHeader"
+<script setup>
 import sideBar from "@/components/Account/sideBar"
+import {ref,inject} from "vue"
 
+const bookmarkList = ref([])
+const appAxios = inject("appAxios")
+appAxios.get("/bookmarks?_expand=category&_expand=user").then(bookmark_list_response => {
+    bookmarkList.value = bookmark_list_response?.data || []
+})
 
-export default {
-    components:{
-        sideBar,
-        appHeader
-    },
-    data() {
-        return {
-            bookmarkList:[]
-        }
-    },
-    created() {
-        this.$appAxios.get("/bookmarks?_expand=category&_expand=user").then(bookmark_list_response => {
-             console.log(bookmark_list_response)
-             this.bookmarkList = bookmark_list_response?.data || []
-        })
-    },
-    mounted() {
-        this.$socket.on("WELCOME_MESSAGE", this.WELCOME_MESSAGE)
-    }
-}
 </script>

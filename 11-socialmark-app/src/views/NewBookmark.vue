@@ -15,62 +15,45 @@
     </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-export default {
-  data() {
-    return {
-      categoryList:[],
-      userData:{
-        title:null,
-        url:null,
-        categoryId:null,
-        description:null
-      }
-    }
-  },
-  methods: {
-    onSave(){
-      const saveData ={
+<script setup>
+import {ref,inject,onMounted,computed} from "vue"
+import {useRouter} from "vue-router"
+import {useStore} from "vuex"
+const categoryList = ref([])
+const userData= ref({
+    title:null,
+    url:null,
+    categoryId:null,
+    description:null
+})
+const appAxios = inject("appAxios")
+const socket = inject("socket")
+const router = useRouter()
+const store = useStore()
+const onSave = () => {
+    const saveData ={
         // ...this.userData.categoryId = document.getElementById("xd"),
-        ...this.userData,
-        userId:this._getCurrentUser?.id,
+        ...userData.value,
+        userId:_getCurrentUser?.value.id,
         created_at: new Date()
       }
-      console.log(document.getElementById("xd"))
-      console.log(saveData)
-      this.$appAxios.post("/bookmarks",saveData).then(save_bookmark_response => {
-      Object.keys(this.userData)?.forEach(field =>(this.userData[field] = null) );
-      console.log(save_bookmark_response)
-      //   this.userData= {
-      //   title:null,
-      //   url:null,
-      //   categoryId:null,
-      //   description:null
-      // }
+      appAxios.post("/bookmarks",saveData).then(save_bookmark_response => {
+      Object.keys(userData.value)?.forEach(field =>(userData.value[field] = null) );
       const socketData ={
         ...save_bookmark_response.data,
-        user : this._getCurrentUser,
-        category : this.categoryList?.find(c => c.id = saveData.categoryId)
+        user : _getCurrentUser.value,
+        category : categoryList.value?.find(c => c.id = saveData.categoryId)
       }
-      this.$socket.emit("NEW_BOOKMARK_EVENT",socketData)
-      this.$router.push({ name:"HomePage"})
+      socket.emit("NEW_BOOKMARK_EVENT",socketData)
+      router.push({ name:"HomePage"})
       })
-    }
-  },
-  mounted() {
-    this.$appAxios.get("/categories").then(category_response =>{ 
-      console.log(category_response?.data)
-      this.categoryList = category_response?.data || [];
-    })
-    // this.$nextTic(() =>{
-    //       console.log(this.$refs.title.focus())
-    // })
-    this.$refs.title.focus()
-    console.log(this.$refs.title)
-  },
-  computed:{
-    ...mapGetters(["_getCurrentUser"])
-  }
 }
+onMounted(()=>{
+  appAxios.get("/categories").then(category_response =>{ 
+      console.log(category_response?.data)
+      categoryList.value = category_response?.data || [];
+    })
+})
+const _getCurrentUser = computed(()=>store.getters._getCurrentUser)
+
 </script>

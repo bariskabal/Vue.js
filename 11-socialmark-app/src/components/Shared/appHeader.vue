@@ -62,17 +62,20 @@
     </div>
 </template>
 
-<script>
-import {mapGetters} from 'vuex'
-export default {
-  computed:{
-    ...mapGetters(["_isAuthenticated"])
-  },
-  methods: {
-    onLogout(){
-      this.$store.commit("logoutUser")
-      this.$router.push({name : "LoginPage"})
-    }
-  },
+<script setup>
+import {computed} from "vue"
+import {useStore} from "vuex"
+import {useRouter} from "vue-router"
+
+
+const store = useStore()
+const router = useRouter()
+
+const _isAuthenticated = computed(()=> store.getters._isAuthenticated)
+
+const onLogout = () =>{
+      store.commit("logoutUser")
+      router.push({name : "LoginPage"})
 }
+
 </script>
